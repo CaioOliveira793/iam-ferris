@@ -1,23 +1,15 @@
+#![allow(dead_code)]
+
 use crate::common::{Effect, IdentityPolicySolver, MatchContains, ResourcePolicySolver};
 
 type ID = u64;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Resource {
-    IAM(IAMResource),
-    Organization(OrganizationResource),
-}
-
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub enum IAMResource {
-    User,
-    Police,
-}
-
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub enum OrganizationResource {
-    Namespace,
-    Channel,
+    IAMUser,
+    IAMPolicy,
+    OrganizationNamespace,
+    OrganizationChannel,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -46,25 +38,15 @@ pub enum IdentityType {
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Action {
-    IAM(IAMAction),
-    Organization(OrganizationAction),
-}
-
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub enum IAMAction {
-    CreateUser,
-    ReadUser,
-    UpdateUser,
-    AttachUserPolice,
-    DeleteUser,
-}
-
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub enum OrganizationAction {
-    CreateNamespace,
-    DeleteNamespace,
-    CreateChannel,
-    DeleteChannel,
+    IAMCreateUser,
+    IAMReadUser,
+    IAMUpdateUser,
+    IAMAttachUserPolice,
+    IAMDeleteUser,
+    OrganizationCreateNamespace,
+    OrganizationDeleteNamespace,
+    OrganizationCreateChannel,
+    OrganizationDeleteChannel,
 }
 
 /// Resource path.

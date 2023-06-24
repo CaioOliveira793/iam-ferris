@@ -155,11 +155,23 @@ where
 #[cfg(test)]
 mod test {
     use super::*;
-    use crate::data::*;
+    use crate::test::data::*;
 
     struct TestRepository {
         identity_policies: Vec<IdentityPolicy>,
         resource_policies: Vec<ResourcePolicy>,
+    }
+
+    impl TestRepository {
+        fn new(
+            identity_policies: Vec<IdentityPolicy>,
+            resource_policies: Vec<ResourcePolicy>,
+        ) -> Self {
+            Self {
+                identity_policies,
+                resource_policies,
+            }
+        }
     }
 
     impl Repository for TestRepository {
@@ -194,13 +206,10 @@ mod test {
                 resource_type: None,
                 resource_id: None,
             }],
-            actions: vec![Action::Organization(OrganizationAction::DeleteChannel)],
+            actions: vec![Action::OrganizationDeleteChannel],
             conditions: vec![],
         };
-        let repository = TestRepository {
-            identity_policies: vec![resolution_policy.clone()],
-            resource_policies: vec![],
-        };
+        let repository = TestRepository::new(vec![resolution_policy.clone()], vec![]);
 
         let requesting_identity = IdentityPath {
             account: Some(100),
@@ -210,14 +219,14 @@ mod test {
         let requested_resource = ResourcePath {
             account: Some(100),
             context: Some(Context::Organization),
-            resource_type: Some(Resource::Organization(OrganizationResource::Channel)),
+            resource_type: Some(Resource::OrganizationChannel),
             resource_id: Some(1),
         };
 
         let resolution = verify_access(
             &requesting_identity,
             &requested_resource,
-            &[Action::Organization(OrganizationAction::DeleteChannel)],
+            &[Action::OrganizationDeleteChannel],
             &repository,
         )
         .unwrap();
